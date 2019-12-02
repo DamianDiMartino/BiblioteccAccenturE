@@ -1,0 +1,57 @@
+﻿@using BiblioteccAccenturE.Models
+
+@{
+    BiblioteccAccenturEEntities dbBusqueda = new BiblioteccAccenturEEntities();
+    List<Autor> autores = dbBusqueda.Autor.OrderBy(aut => aut.NombreYApellido).ToList();
+    List<Genero> generos = dbBusqueda.Genero.OrderBy(gen => gen.NombreGenero).ToList();
+    List<Libro> libros = dbBusqueda.Libro.OrderBy(lib => lib.Titulo).ToList();
+    List<Editorial> editoriales = dbBusqueda.Editorial.OrderBy(edit => edit.NombreEditorial).ToList();
+
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/estilos2.css" rel="stylesheet" />
+    <link href="~/Content/listados.css" rel="stylesheet" />
+    <link href="~/Content/imagenes.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <link href="~/Content/MisEstilosCss.css" rel="stylesheet" />
+    <title>BiblioteccAccenturE</title>
+</head>
+
+<div class="grande" style="text-align:center">
+    <div class="medianoarriba">
+        <div style="font-size:25px">@Html.ActionLink("Libros", "ListadoLibros", "Libro", null, null)</div>
+        <div class="izquierdaarriba">
+
+        </div>
+        <div style="font-size:25px">@Html.ActionLink("Editoriales", "ListadoEditoriales", "Editorial", null, null)</div>
+        <div class="izquierdabajo">
+
+        </div>
+    </div>
+
+    <div class="medianoabajo">
+        <div style="font-size:25px">@Html.ActionLink("Autores", "ListadoAutores", "Autor", null, null)</div>
+        <div class="derechaarriba">
+
+        </div>
+        <div style="font-size:25px">@Html.ActionLink("Generos", "ListadoGeneros", "Genero", null, null)</div>
+        <div class="derechaabajo">
+
+        </div>
+    </div>
+</div>
+
+<div class="bajo"></div>

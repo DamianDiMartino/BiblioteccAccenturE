@@ -1,0 +1,138 @@
+﻿@using BiblioteccAccenturE.Models
+@model IEnumerable<Libro>
+@{
+    ViewBag.Title = "ListadoLibros";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    BiblioteccAccenturEEntities dbListar = new BiblioteccAccenturEEntities();
+}
+
+<div class="text-right">
+    @Html.ActionLink(" ", "Agregar",null, new
+                            {
+                                @class = "glyphicon glyphicon-plus",
+                                style = "font-size:1.5em"
+                            })
+</div>
+
+@using (Html.BeginForm())
+{
+    <table class="table ">
+        <thead>
+            <tr id="encabezado">
+                <th class="text-center">Titulo</th>
+                <th class="text-center">Autor</th>
+                <th class="text-center">Genero</th>
+                <th class="text-center">Editorial</th>
+                <th class="text-center">ISBN</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="encabezado">
+                <td>
+                    <input name="FiltroTitulo" type="text" class="form-control" />
+                </td>
+                <td>
+                    <select class="form-control" name="FiltroAutor">
+                        <option>Seleccione un Autor...</option>
+                        @foreach (Autor autor in dbListar.Autor.ToList())
+                        {
+                            <option value="@autor.Id_Autor">@autor.NombreYApellido</option>
+                        }
+                    </select>
+                </td>
+
+                <td>
+                    <select class="form-control" name="FiltroGenero">
+                        <option>Seleccione Genero...</option>
+                        @foreach (Genero generos in dbListar.Genero.ToList())
+                        {
+                            <option value="@generos.Id_Genero">@generos.NombreGenero</option>
+                        }
+                    </select>
+                </td>
+
+                <td>
+                    <select class="form-control" name="FiltroEditorial">
+                        <option>Seleccione Editorial...</option>
+                        @foreach (Editorial editoriales in dbListar.Editorial.ToList())
+                        {
+                            <option value="@editoriales.Id_Editorial">@editoriales.NombreEditorial</option>
+                        }
+                    </select>
+                </td>
+
+                <td class="text-center">
+                    FILTRO ISBN
+                </td>
+                <td class="text-center">
+                    <button class="glyphicon glyphicon-search btn btn-primary"></button>
+                </td>
+            </tr>
+            @foreach (Libro lib in this.Model)
+            {
+                <tr>
+                    <td class="text-center">@lib.Titulo</td>
+                    <td class="text-center">
+                        @foreach (Autor autor in lib.Autor)
+                        {
+                            <div class="text-center">@autor.NombreYApellido</div>
+                        }
+                    </td>
+
+                    <th class="text-center">
+                        @foreach (Genero generos in dbListar.Genero.ToList())
+                        {
+                            if (generos.Id_Genero == lib.Id_Genero)
+                            {
+                                @generos.NombreGenero;
+                            }
+                        }
+                    </th>
+
+                    <th class="text-center">
+                        @foreach (Editorial editoriales in dbListar.Editorial.ToList())
+                        {
+                            if (editoriales.Id_Editorial == lib.Id_Editorial)
+                            {
+                                @editoriales.NombreEditorial;
+                            }
+                        }
+                    </th>
+                    <th class="text-center">@lib.ISBN</th>
+                    <td class="text-right">
+                        @Html.ActionLink(" ", "EditarLibro", new { Id = lib.Id_Libro }, new
+                            {
+                                @class = "glyphicon glyphicon-pencil",
+                                style = "font-size:1.5em"
+                            })
+                        @Html.ActionLink(" ", "EliminarLibro", new { Id = lib.Id_Libro }, new
+                            {
+                                @class = "glyphicon glyphicon-trash",
+                                style = "font-size:1.5em"
+                            })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- mirar filtro filter de javascript-->

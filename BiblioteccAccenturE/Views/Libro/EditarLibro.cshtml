@@ -1,0 +1,288 @@
+﻿@using BiblioteccAccenturE.Models
+
+@model Libro
+@{
+    ViewBag.Title = "EditarLibro";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    BiblioteccAccenturEEntities dbEditar = new BiblioteccAccenturEEntities();
+    List<Autor> autores = dbEditar.Autor.OrderBy(aut => aut.NombreYApellido).ToList();
+    List<Genero> generos = dbEditar.Genero.OrderBy(gen => gen.NombreGenero).ToList();
+    List<Libro> libros = dbEditar.Libro.OrderBy(lib => lib.Titulo).ToList();
+    List<Editorial> editoriales = dbEditar.Editorial.OrderBy(edit => edit.NombreEditorial).ToList();
+    Editorial editorial = this.ViewBag.Editorial;
+
+}
+
+
+
+<script>
+    function nuevoAutor() {
+
+        var lista = document.getElementById("listaAutores");
+        var select = lista.firstElementChild;
+        var copiaSelect = select.cloneNode(true);
+        copiaSelect.selectedIndex = 0;
+        lista.appendChild(copiaSelect);
+    }
+
+    var modalLibro = document.getElementById("modalLibro");
+    
+
+    function validacion() {
+        var formEdit = $("#formEdit").val();
+        var formGen = $("#formGen").val();
+        var formAut = $("#formAut").val();
+
+        var valida = document.forms["editaLibro"]["Titulo"].value;
+        if (valida == "") {
+            $("#msgError").find("#modalLibro").text("Titulo Libro");
+            $("#msgError").modal("show");
+            
+            return false;
+        }
+        valida = document.forms["editaLibro"]["ISBN"].value;
+        if (valida == "") {
+            $("#msgError").find("#modalLibro").text("Numero ISBN");
+            $("#msgError").modal("show");
+            return false;
+        }
+
+        if (formEdit==0) {
+            $("#msgError").find("#modalLibro").text("Editorial");
+            $("#msgError").modal("show");
+            return false;
+        }
+        
+        if (formGen==0) {
+            $("#msgError").find("#modalLibro").text("Genero");
+            $("#msgError").modal("show");
+            return false;
+        }
+
+         if (formAut==0) {
+            $("#msgError").find("#modalLibro").text("Autor");
+            $("#msgError").modal("show");
+            return false;
+        }
+
+    }
+
+</script>
+
+<body>
+    <h1 class="text-center">@this.ViewBag.TituloPagina</h1>
+
+    <form method="post" name="editaLibro" onsubmit="return validacion()">
+
+        @using (Html.BeginForm())
+        {
+            <div class="tipeadores">
+                @Html.HiddenFor(lib => lib.Id_Libro)
+                @Html.LabelFor(lib => lib.Titulo, "Titulo")
+                @Html.EditorFor(lib => lib.Titulo,
+                          new
+                            {
+                               htmlAttributes = new
+                              {
+                                                                @class = "form-control",
+                                placeholder = "Ingrese el Titulo del Libro"
+                              }
+                          })
+            </div>
+            <div id="isbn" class="tipeadores">
+                @Html.LabelFor(lib => lib.ISBN, "Numero ISBN")
+                @Html.EditorFor(lib => lib.ISBN, new { htmlAttributes = new { @class = "form-control", placeholder = "Ingrese Numero ISBN" } })
+            </div>
+
+            <div class="titulos">Editorial</div>
+
+            <div id="edicion">
+                <div id="divisor"></div>
+                <div id="listaEditoriales" class="selectores">
+                    @if (this.Model != null)
+                    {
+                        int Id_Editorial = this.ViewBag.Id_Editorial;
+                        <select id="formEdit" class="form-control" name="edit">
+                            <option value="0">Seleccione una Editorial...</option>
+                            @foreach (Editorial edit in editoriales)
+                            {
+
+                                <option @(edit.Id_Editorial == (Id_Editorial) ? "selected" : "")
+                                        value="@edit.Id_Editorial">
+                                    @edit.NombreEditorial
+                                </option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+
+                        <select id="formEdit" class="form-control" name="edit">
+                            <option selected value="0">Seleccione una Editorial...</option>
+                            @foreach (Editorial edit in editoriales)
+                            {
+                                <option value="@edit.Id_Editorial">@edit.NombreEditorial</option>
+                            }
+                        </select>
+                    }
+                </div>
+
+                <div id="divisor">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#newEdit"
+                            id="btnadd">
+                        @Html.ActionLink("Agregar Editorial", "AgregarEditorial", "Editorial", null, null)
+                    </button>
+                </div>
+            </div>
+            <div class="titulos">Genero</div>
+            <div id="edicion">
+                <div id="divisor"></div>
+                <div id="listaGeneros" class="selectores">
+                    @if (this.Model != null)
+                    {
+                        int Id_Genero = this.ViewBag.Id_Genero;
+                        <select id="formGen" class="form-control" name="gen">
+                            <option value="0">Seleccione un Genero...</option>
+                            @foreach (Genero generoLibro in generos)
+                            {
+                                <option @(generoLibro.Id_Genero == (Id_Genero) ? "selected" : "")
+                                        value="@generoLibro.Id_Genero">
+                                    @generoLibro.NombreGenero
+                                </option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <select id="formGen" class="form-control" name="gen">
+                            <option selected value="0">Seleccione un Genero...</option>
+                            @foreach (Genero gen in generos)
+                            {
+                                <option value="@gen.Id_Genero">@gen.NombreGenero</option>
+                            }
+                        </select>
+                    }
+                </div>
+                <div id="divisor">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#newEdit"
+                            id="btnadd">
+                        @Html.ActionLink("Agregar Genero", "AgregarGenero", "Genero", null, null)
+                    </button>
+                </div>
+            </div>
+            <div class="titulos">Autores</div>
+            <div id="edicion">
+                <div id="divisor"></div>
+                <div id="listaAutores" class="selectores">
+                    @if (this.Model != null)
+                    {
+                        foreach (Autor autorLibro in this.Model.Autor)
+                        {
+                            <select id="formAut" class="form-control" name="autores">
+                                <option value="0">Seleccione un Autor...</option>
+                                @foreach (Autor autorActual in autores)
+                                {
+                                    <option @(autorActual.Id_Autor.Equals(autorLibro.Id_Autor) ? "selected" : "")
+                                            value="@autorActual.Id_Autor">
+                                        @autorActual.NombreYApellido
+                                    </option>
+                                }
+                            </select>
+                        }
+                    }
+                    else
+                    {
+
+                        <select id="formAut" class="form-control" name="autores">
+                            <option selected value="0">Seleccione un autor...</option>
+                            @foreach (Autor autor in autores)
+                            {
+                                <option value="@autor.Id_Autor">@autor.NombreYApellido</option>
+                            }
+                        </select>
+                    }
+
+                    <div class="text-right">
+                        <a onclick="nuevoAutor()">otro autor...</a>
+                    </div>
+                </div>
+                <div id="divisor">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#newEdit"
+                            id="btnadd">
+                        @Html.ActionLink("Agregar Autor", "AgregarAutor", "Autor", null, null)
+                    </button>
+                </div>
+            </div>
+            <div class="btnposition">
+                <div id="espacios"></div>
+                <button class="btn btn-primary form-control" style="margin-top:1em" id="enviar">
+                    Guardar Cambios
+                </button>
+                <div id="espacios"></div>
+            </div>
+        }
+        &nbsp;&nbsp;
+    </form>
+
+    <div id="msgError" class="modal fade" role="dialog">
+        <div class="modal-sm">
+            <div class="modal-content" style="color:red">
+                <div class="modal-header" style="color:red">
+                    <h4 id="modalLibro" style="text-align:center"> Error </h4>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align:center"> Faltan Completar Datos </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"> OK </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="msgConf" class="modal fade" role="dialog">
+        <div class="modal-sm">
+            <div class="modal-content" style="color:red">
+                <div class="modal-header" style="color:red">
+                    <h4 id="modalLibro" style="text-align:center"> Cambios </h4>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align:center"> Desea Guardar Cambios? </p>
+                </div>
+                <div class="modal-footer">
+                    <button id="conf" type="button" class="btn btn-danger" data-dismiss="modal" value="1"> OK </button>
+                    <button id="cancel" type="button" class="btn btn-danger" data-dismiss="modal" value="0"> Cancelar </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function postbackForm() {
+        var request = new XMLHttpRequest();
+        request.open("POST", window.location.pathname)
+        request.onreadystatechange = function (resp) {
+            if ((resp.currentTarget.status == 200)
+                && (resp.currentTarget.readyState == 4)) {
+                var btn = document.getElementById("mostrarModal");
+                var msg = document.getElementById("contenidoInformacion");
+                msg.innerHTML = resp.currentTarget.responseText;
+                btn.click();
+            }
+        }
+        var formulario = document.getElementsByTagName("form")[0];
+        request.send(new FormData(formulario));
+    }
+</script>
+
+
+
+

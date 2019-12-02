@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BiblioteccAccenturE.Models.Genero>
+@{
+    ViewBag.Title = "ListadoGeneros";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">LISTADO DE GENEROS</h1>
+<div>
+    <div class="text-right">
+        @Html.ActionLink(" ", "AgregarGenero", null, new
+                                {
+                                    @class = "glyphicon glyphicon-plus",
+                                    style = "font-size:1.5em"
+                                })
+    </div>
+    <div id="separador">
+
+    </div>
+    <div>
+
+        <table class="table">
+            <thead>
+                <tr id="encabezado">
+                    <th>GENERO</th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var gen in this.Model)
+                {
+                    <tr>
+                        <td> @Html.ActionLink(gen.NombreGenero, "LibrosPorGenero", "Libro", new { Id = gen.Id_Genero }, null)</td>
+                        <td class="text-right">
+                            @Html.ActionLink(" ", "EditarGenero", new { Id = gen.Id_Genero },
+                            new
+                            {
+                                @class = "glyphicon glyphicon-pencil",
+                                style = "font-size:1.5em"
+                            })
+                            &nbsp &nbsp &nbsp
+                            @Html.ActionLink(" ", "EliminarGenero", new { Id = gen.Id_Genero },
+                            new
+                            {
+                                @class = "glyphicon glyphicon-trash",
+                                style = "font-size:1.5em"
+                            })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="separador">
+
+    </div>
+</div>
+

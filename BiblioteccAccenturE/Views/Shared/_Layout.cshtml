@@ -1,0 +1,120 @@
+﻿@using BiblioteccAccenturE.Models
+
+@{
+    BiblioteccAccenturEEntities dbBusqueda = new BiblioteccAccenturEEntities();
+    List<Autor> autores = dbBusqueda.Autor.OrderBy(aut => aut.NombreYApellido).ToList();
+    List<Genero> generos = dbBusqueda.Genero.OrderBy(gen => gen.NombreGenero).ToList();
+    List<Libro> libros = dbBusqueda.Libro.OrderBy(lib => lib.Titulo).ToList();
+    List<Editorial> editoriales = dbBusqueda.Editorial.OrderBy(edit => edit.NombreEditorial).ToList();
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/estilos2.css" rel="stylesheet" />
+    <link href="~/Content/listados.css" rel="stylesheet" />
+    <link href="~/Content/imagenes.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <link href="~/Content/MisEstilosCss.css" rel="stylesheet" />
+    <title>BiblioteccAccenturE</title>
+</head>
+<body>
+
+    <nav>
+        <div class="nav1">
+            <div class="nav2" id="sub2">
+                @Html.ActionLink("Home", "Index", "Home", null, null)
+            </div>
+
+            </div>
+            <div class="nav2">
+
+                <div class="nav2" id="sub">@Html.ActionLink("Titulos", "ListadoLibros", "Libro", null, null)</div>
+                <div class="nav2" id="sub">@Html.ActionLink("Generos", "ListadoGeneros", "Genero", null, null)</div>
+                <div class="nav2" id="sub">@Html.ActionLink("Editoriales", "ListadoEditoriales", "Editorial", null, null)</div>
+                <div class="nav2" id="sub"> @Html.ActionLink("Autores", "ListadoAutores", "Autor", null, null)</div>
+            </div>
+            <div></div>
+</nav>
+    <header>
+
+        <button class="material-icons" id="listado">menu</button>
+        <div class="contenedor">
+            <div class="buscador">
+              
+                    <input type="search" id="bus" placeholder="Ingrese Palabras Clave.."/>
+                <div class="contbus">
+                    <div class="conttab">
+                        <table id="tab">
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                 
+
+                                @foreach (Autor aut in autores)
+                                {
+                                    <tr>
+                                        <td>@Html.ActionLink(aut.NombreYApellido, "LibrosPorAutor", "Libro", new { Id = aut.Id_Autor }, null)</td>
+                                    </tr>
+                                }
+
+                                @foreach (Genero gen in generos)
+                                {
+                                    <tr>
+                                        <td>@Html.ActionLink(gen.NombreGenero, "LibrosPorGenero", "Libro", new { Id = gen.Id_Genero }, null)</td>
+                                    </tr>
+                                }
+
+                                @foreach (Editorial edit in editoriales)
+                                {
+                                    <tr>
+                                        <td>@Html.ActionLink(edit.NombreEditorial, "LibrosPorEditorial", "Libro", new { Id = edit.Id_Editorial }, null)</td>
+                                    </tr>
+                                }
+
+                                @foreach (Libro lib in libros)
+                                {
+                                    <tr>
+                                        <td>@Html.ActionLink(lib.Titulo, "LibrosPorAutor", "Libro", new { Id = lib.Id_Libro }, null)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+                <button class="material-icons" id="busca">search</button>
+            </div>
+            <a href="#" class="home"><h2>BiblioteccAccenturE</h2></a>
+        </div>
+    </header>
+    <main>
+        <div>
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer style="text-align:center; font-size:30px">
+        <p> &gt; Accenture Accademy - &copy; Copyright - 2019 </p>
+        <p>&reg; Derechos Reservados </p>
+    </footer>
+
+    <script src="~/Scripts/Script.js"></script>
+</body>
+</html>
